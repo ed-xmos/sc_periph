@@ -1,9 +1,6 @@
 #include "at_periph.h"
 #include "debug_print.h"
 
-#define AWAKE_TIME 2000  //Time awake in ms
-#define SLEEP_TIME 5000  //Time asleep in ms
-
 
 void init_sleep_mem(char write_val, char memory[], unsigned char size ){
   for (unsigned i = 0; i < size; i++){

@@ -10,6 +10,7 @@ static unsigned int convert_ms_to_ticks (unsigned int milliseconds){
   ticks = (unsigned long long) milliseconds * (unsigned long long) read_val_32 * 1000;
   return ticks;
 }
+
 static unsigned int convert_ticks_to_ms (unsigned long long ticks){
   unsigned int read_val_32;
   unsigned int milliseconds;
@@ -64,10 +65,6 @@ void at_pm_enable_wake_source(wake_sources_t wake_source){
       write_val = XS1_SU_PWR_PIN_WAKEUP_EN_SET(write_val, 1);   //Disable pin wake
       write_val = XS1_SU_PWR_PIN_WAKEUP_ON_SET(write_val, 1);   //Wake on high level
       break;
-
-    case USB_RESUME:
-      write_val = XS1_SU_PWR_USB_PU_EN_SET(write_val, 1);       //Enable USB resume wake
-      break;
   }
 //  debug_printf("Wrting value to power control reg = 0x%x\n", write_val);
   write_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_MISC_CTRL_NUM, 1, &write_val);
@@ -91,10 +88,6 @@ void at_pm_disable_wake_source(wake_sources_t wake_source)
     case WAKE_PIN_HIGH:
       write_val = XS1_SU_PWR_PIN_WAKEUP_EN_SET(write_val, 0);   //Disable pin wake
       write_val = XS1_SU_PWR_PIN_WAKEUP_ON_SET(write_val, 1);   //Wake on high level
-      break;
-
-    case USB_RESUME:
-      write_val = XS1_SU_PWR_USB_PU_EN_SET(write_val, 0);       //Disable USB resume wake
       break;
   }
 //  debug_printf("Wrting value to power control reg = 0x%x\n", write_val);
