@@ -2,23 +2,9 @@
 #define DEBUG_PRINT_ENABLE 1
 #include "debug_print.h"
 #include <platform.h>
-#include <xscope.h>
-
 
 #define RTC_TIME 1000  //Time awake in ms
-#define SLEEP_TIME 10000  //Time asleep in ms
-
-void xscope_config_uart(port id);
-port xscope_uart_tx = XS1_PORT_1B; //The button on the analog slice, but pulled up
-									   //via 10K so OK as long as not pressed.
-
-
-void xscope_user_init (void) {
-  xscope_register(0, 0, "", 0, "");
-  xscope_config_io(XSCOPE_IO_BASIC);
-  xscope_config_uart(xscope_uart_tx);
-}
-
+#define SLEEP_TIME 5000  //Time asleep in ms
 
 //function to initialise the sleep memory test array
 void init_sleep_mem(char write_val, char memory[], unsigned char size ){
@@ -105,21 +91,16 @@ void sleep_demo(void){
   at_pm_enable_wake_source(WAKE_PIN_HIGH);	//Enable Wake pin = high wakeup
 
   debug_printf("Going to sleep now for %u ms, alarm time = %ums\n", SLEEP_TIME, alarm_time);
-  debug_printf("Sleep test passed if sleep is observed for about 10s, or until WAKE pin goes high (XD43)\n", SLEEP_TIME, alarm_time);
+  debug_printf("Sleep test passed if sleep is observed for about %ds, or until WAKE pin goes high (Tile 0, XD43)\n", SLEEP_TIME/1000);
 
   at_pm_sleep_now(); //Go to sleep. Debugger will disconnect after this
 }
 
 
-void something(void){
-   while(0);
-}
-
 int main (void)
 {
   par{
-    sleep_demo();
-    something();
+	  on tile[0]: sleep_demo();
   }
   return 0;
 }

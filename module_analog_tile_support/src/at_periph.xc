@@ -1,6 +1,8 @@
 #include "at_periph.h"
 #include "debug_print.h"
 
+//TODO - Add assert/fail
+//TODO - Add ADC from Peter's code
 
 static unsigned int convert_ms_to_ticks (unsigned int milliseconds){
   unsigned int read_val_32;
