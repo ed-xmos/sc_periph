@@ -1,9 +1,24 @@
 #include "at_periph.h"
 #define DEBUG_PRINT_ENABLE 1
 #include "debug_print.h"
+#include <platform.h>
+#include <xscope.h>
+
 
 #define RTC_TIME 1000  //Time awake in ms
 #define SLEEP_TIME 10000  //Time asleep in ms
+
+void xscope_config_uart(port id);
+port xscope_uart_tx = XS1_PORT_1B; //The button on the analog slice, but pulled up
+									   //via 10K so OK as long as not pressed.
+
+
+void xscope_user_init (void) {
+  xscope_register(0, 0, "", 0, "");
+  xscope_config_io(XSCOPE_IO_BASIC);
+  xscope_config_uart(xscope_uart_tx);
+}
+
 
 //function to initialise the sleep memory test array
 void init_sleep_mem(char write_val, char memory[], unsigned char size ){
@@ -27,7 +42,7 @@ void sleep_demo(void){
   //than the sleep memory. It is expected that structures for example, may be stored
   int sleep_mem_to_write[XS1_SU_NUM_GLX_PER_MEMORY_BYTE/4], sleep_mem_read[XS1_SU_NUM_GLX_PER_MEMORY_BYTE/4];
 
-  //initialise sleep memory. Two buffers - one gets written and the other is what's read back
+  //initialise sleep memory shadow. Two buffers - one gets written and the other is what's read back
   init_sleep_mem(0xed, (sleep_mem_to_write, char[]), sizeof(sleep_mem_to_write));
   init_sleep_mem(0x00, (sleep_mem_read, char[]), sizeof(sleep_mem_read));
 
@@ -38,7 +53,7 @@ void sleep_demo(void){
 	debug_printf("FAIL: Deep sleep memory incorrectly reports being valid\n",temp);
 	all_tests_passed = 0;
   }
-  at_pm_memory_set_validation(1);
+  at_pm_memory_set_validation(1); //Set deep sleep memory status to valid
 
   if (at_pm_memory_is_valid()) debug_printf("PASS: Deep sleep memory correctly set to valid\n");
   else {
@@ -59,7 +74,7 @@ void sleep_demo(void){
   }
 
   //Try out the RTC reset and read functions
-  at_rtc_clear();
+  at_rtc_reset();
   temp = at_rtc_read();
   if (!temp) debug_printf("PASS: RTC reset to zero successfully\n");
   else {
@@ -81,7 +96,8 @@ void sleep_demo(void){
 
   if (all_tests_passed) debug_printf("PASS: All automated tests passed\n");
   else debug_printf("FAIL: One or more automated tests failed\n");
-  //The following
+
+  //The following code cannot be automated due to the chip powering down and debugger disconnecting
   at_pm_set_min_sleep_time(150); 			//Set min sleep period to about 150ms.
   alarm_time = at_rtc_read() + SLEEP_TIME;	//Calculate wakeup time
   at_pm_set_wake_time(alarm_time);			//set alarm time (wakeup)
