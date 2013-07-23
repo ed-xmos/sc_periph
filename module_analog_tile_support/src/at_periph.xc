@@ -35,7 +35,8 @@ void at_pm_memory_write_impl(unsigned char data[], unsigned char size){
 char at_pm_memory_is_valid(void){
   char val[1];
   read_periph_8 (xs1_su_periph, XS1_SU_PER_MEMORY_CHANEND_NUM, XS1_SU_PER_MEMORY_VALID_NUM, 1, val);
-  return val[0];
+  if (val[0] == 0xed) return 1; 	//magic value for valid
+  else return 0;
 }
 void at_pm_memory_set_validation(char isvalid){
   char val[1];
@@ -52,7 +53,7 @@ void at_pm_enable_wake_source(wake_sources_t wake_source){
   switch (wake_source){
     case RTC:
       write_val = XS1_SU_PWR_TMR_WAKEUP_64_SET(write_val, 1);   //Set timer to 64b mode
-      write_val = XS1_SU_PWR_SLEEP_CLK_SEL_SET(write_val, 0);   //Use 31KHz source as clock for timer
+      write_val = XS1_SU_PWR_SLEEP_CLK_SEL_SET(write_val, 0);   //Use 31KHz source as clock for sleep
       write_val = XS1_SU_PWR_TMR_WAKEUP_EN_SET(write_val, 1);   //Enable timer wake
       break;
 
@@ -76,7 +77,7 @@ void at_pm_disable_wake_source(wake_sources_t wake_source)
   switch (wake_source){
     case RTC:
       write_val = XS1_SU_PWR_TMR_WAKEUP_64_SET(write_val, 1);   //Set timer to 64b mode
-      write_val = XS1_SU_PWR_SLEEP_CLK_SEL_SET(write_val, 0);   //Use 31KHz source as clock for timer
+      write_val = XS1_SU_PWR_SLEEP_CLK_SEL_SET(write_val, 0);   //Use 31KHz source as clock for sleep
       write_val = XS1_SU_PWR_TMR_WAKEUP_EN_SET(write_val, 0);   //Disable timer wake
       break;
 
@@ -102,6 +103,17 @@ void at_pm_set_wake_time(unsigned int alarm_time){
   write_val[1] = alarm_ticks >> 32;
   debug_printf("wake_at[1..0]  is 0x%x, 0x%x\n", write_val[1], write_val[0]);
   write_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_WAKEUP_TMR_LWR_NUM, 2, write_val);
+}
+
+
+void at_pm_set_min_sleep_time(unsigned int min_sleep_time){
+  int write_val_32;
+  unsigned int calc, bit_posn = 0;
+  calc = ((min_sleep_time * SI_OSCILLATOR_FREQ_31K) / 1000); //sleep time in 31KHz sleep clock ticks
+  for (int i = 0; i < 32; i++) if ((calc >> i) & 0x1) bit_posn = i; //perform an approximate log2 calculation
+  read_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_STATE_ASLEEP_NUM, 1, &write_val_32);
+  write_val_32 = XS1_SU_PWR_INT_EXP_SET(write_val_32, bit_posn);
+  write_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_STATE_ASLEEP_NUM, 1, &write_val_32);
 }
 
 void at_pm_sleep_now(void){
@@ -147,16 +159,6 @@ void at_pm_sleep_now(void){
   write_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_MISC_CTRL_NUM, 1, &write_val_32);
 }
 
-void at_pm_set_min_sleep_time(unsigned int min_sleep_time){
-  int write_val_32;
-  unsigned int calc, bit_posn = 0;
-  calc = ((min_sleep_time * SI_OSCILLATOR_FREQ_31K) / 1000); //sleep time in 31KHz sleep clock ticks
-  for (int i = 0; i < 32; i++) if ((calc >> i) & 0x1) bit_posn = i; //perform an approximate log2 calculation
-  read_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_STATE_ASLEEP_NUM, 1, &write_val_32);
-  write_val_32 = XS1_SU_PWR_INT_EXP_SET(write_val_32, bit_posn);
-  write_periph_32(xs1_su_periph, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_STATE_ASLEEP_NUM, 1, &write_val_32);
-}
-
 
 //RTC
 unsigned int at_rtc_read(void){
@@ -168,7 +170,7 @@ unsigned int at_rtc_read(void){
   return convert_ticks_to_ms(ticks);
 }
 
-void at_rtc_clear(void){
+void at_rtc_reset(void){
   unsigned int time_now[2] = {0, 0};
   write_periph_32(xs1_su_periph, XS1_SU_PER_RTC_CHANEND_NUM, XS1_SU_PER_RTC_LWR_32BIT_NUM, 2, time_now);
 }
@@ -190,17 +192,9 @@ void at_watchdog_set_timeout(unsigned short milliseconds){
   unsigned int write_val;
   write_val = milliseconds | (~milliseconds << 16); //Set upper 16b to 1's complement of lower
                                                     //This is the 'password' for accessing reg
-
-  unsigned int read_val;
-  read_node_config_reg(xs1_su_periph, XS1_SU_CFG_WDOG_TMR_NUM, read_val);
-  debug_printf("WDT timer before timeout write=%u\n", XS1_SU_CFG_WDOG_TMR(read_val));
-
   write_node_config_reg(xs1_su_periph, XS1_SU_CFG_WDOG_TMR_NUM, write_val); //write expiry value
-
-  read_node_config_reg(xs1_su_periph, XS1_SU_CFG_WDOG_TMR_NUM, read_val);
-  debug_printf("WDT timer after timeout write=%u\n", XS1_SU_CFG_WDOG_TMR(read_val));
-
 }
+
 unsigned short at_watchdog_kick(void){
   unsigned short expiry_val, wdt_timer;
   unsigned int write_val, read_val;
