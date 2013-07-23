@@ -18,6 +18,11 @@
         <uri>git://github.com/xcore/sc_util</uri>
         <version>1.0.3rc0</version>
     </dependency>
+    <dependency repo = "sc_slicekit_support">
+        <githash>7920fc4235a96585274d73d25d275ea63b4cd285</githash>
+        <uri>https://github.com/xcore/sc_slicekit_support.git</uri>
+        <version>1.0.3rc0</version>
+    </dependency>
     <description>Collection of functions to support peripheral tiles.</description>
     <docdir>app_adc_demo_u/doc_quickstart</docdir>
     <docdir>module_usb_tile_support/doc</docdir>
@@ -25,9 +30,9 @@
     <name>sc_periph</name>
     <maintainer>pthedinger</maintainer>
     <partnumber>XM-002789-DH</partnumber>
-    <release parenthash = "5c58f698049e2a84e3df4bbbe88bfecf8a4eb241" version = "1.0.0rc0"></release>
+    <release parenthash = "5c58f698049e2a84e3df4bbbe88bfecf8a4eb241" version = "1.0.0rc0" githash = "069980a1374cb56f655c79b57749caa62072cf08"></release>
     <subpartnumber>XM-002790-SM</subpartnumber>
     <vendor>XMOS</vendor>
-    <version_defines></version_defines>
     <xpd_version>1.0</xpd_version>
+    <version_defines></version_defines>
 </xpd>

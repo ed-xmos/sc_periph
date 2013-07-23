@@ -1,5 +1,5 @@
-xCORE-USB Support Library
-=========================
+xCORE-Analog Support Library
+============================
 
 This module provides support functions for xCORE-Analog devices.
 
