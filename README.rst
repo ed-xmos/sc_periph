@@ -34,4 +34,6 @@ Required software (dependencies)
 ================================
 
   * sc_util (git://github.com/xcore/sc_util)
+  * sc_slicekit_support (https://github.com/xcore/sc_slicekit_support.git)
+  * sc_pwm (https://github.com/xcore/sc_pwm.git)
 
