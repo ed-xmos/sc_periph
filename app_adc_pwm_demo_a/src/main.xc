@@ -3,7 +3,6 @@
 #include "pwm_tutorial_example.h"
 #include "debug_print.h"
 
-
 #define LOOP_PERIOD     10000000 // 100ms for printing and ADC trigger
 #define PWM_PERIOD           100 // Set PWM period to 1us, 1MHz
 
@@ -21,7 +20,6 @@ void xscope_user_init(void) {
            XSCOPE_UINT, "8b value");
    xscope_config_io(XSCOPE_IO_BASIC);
 }
-
 
 void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
 {
