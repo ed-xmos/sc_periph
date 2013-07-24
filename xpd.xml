@@ -9,7 +9,7 @@
         </component>
         <component name = "xCORE-Analog Support Library" type = "component" buildresults_path = "module_analog_tile_support/.module_analog_tile_support.buildinfo" scope = "General Use" path = "module_analog_tile_support" metainfo_path = "module_analog_tile_support/module_analog_tile_support.metainfo" local = "false" id = "module_analog_tile_support" description = "Library providing support for xCORE-Analog (A-Series) devices.">
             <board></board>
-            <keyword>adc wet etc sleep mode power peripherals</keyword>
+            <keyword>adc wdt etc sleep mode power peripherals</keyword>
         </component>
         <component name = "xCORE-USB Support Library" type = "component" buildresults_path = "module_usb_tile_support/.module_usb_tile_support.buildinfo" scope = "General Use" path = "module_usb_tile_support" metainfo_path = "module_usb_tile_support/module_usb_tile_support.metainfo" local = "false" id = "module_usb_tile_support" description = "Library providing support for xCORE-USB (U-Series) devices.">
             <componentDependency>module_logging</componentDependency>
