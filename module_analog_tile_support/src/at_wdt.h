@@ -1,7 +1,7 @@
 #ifndef AT_WDT_H_
 #define AT_WDT_H_
 
-#include <xs1_su_registers.h>
+#include <xs1_su.h>
 #include <platform.h>
 
 //////////Watchdog timer//////////

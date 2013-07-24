@@ -8,6 +8,8 @@
 
 #include <platform.h>
 #include <xccompat.h>
+#include <xs1_su.h>
+
 
 /**
  * The maximum number of ADCs available on any device.

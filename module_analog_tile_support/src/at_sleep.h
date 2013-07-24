@@ -1,7 +1,7 @@
 #ifndef AT_SLEEP_H_
 #define AT_SLEEP_H_
 
-#include <xs1_su_registers.h>
+#include <xs1_su.h>
 #include <platform.h>
 
 //Macro to allow arbitrary struct/array to be passed to sleep mem functions
