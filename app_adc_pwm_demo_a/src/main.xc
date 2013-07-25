@@ -6,8 +6,10 @@
 #define LOOP_PERIOD     10000000 // 100ms for printing and ADC trigger
 #define PWM_PERIOD           100 // Set PWM period to 1us, 1MHz
 
-#define pwm_duty_calc(x) ((x * PWM_PERIOD) / 255) //duty calc, 255 = full scale
+#define pwm_duty_calc(x) ((x * PWM_PERIOD) >> 8) //duty calc, 255 = full scale
 
+//Port and clock definitions
+//Note that these assume use of XP-SKC-A16 + XA-SK-MIXED-SIGNAL hardware
 on tile[0]: port trigger_port = PORT_ADC_TRIGGER; //Port 1I, D24
 on tile[0]: port pwm_dac_port = XS1_PORT_1G;      //D22
 on tile[0]: clock cl = XS1_CLKBLK_2;
@@ -28,11 +30,11 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
 
     unsigned char joystick, header, header_old; //ADC values
 
-    debug_printf("Analog loopback demo started. Using 8b ADC values\n");
+    debug_printf("Analog loopback demo started.\n");
 
     adc_config_t adc_config = { { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
     adc_config.input_enable[4] = 1; //Analog input on header
-    adc_config.input_enable[2] = 1; //Joystick y axis
+    adc_config.input_enable[2] = 1; //One axis of the joystick (the other is 3)
     adc_config.bits_per_sample = ADC_8_BPS;
     adc_config.samples_per_packet = 2;
     adc_config.calibration_mode = 0;
@@ -42,10 +44,10 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
     c_pwm_dac <: PWM_PERIOD;         //Set PWM period
     c_pwm_dac <: pwm_duty_calc(0);   //Set initial duty cycle
 
-    loop_timer :> loop_time;
+    loop_timer :> loop_time;         //Set timer for first loop tick
     loop_time += LOOP_PERIOD;
 
-    at_adc_trigger_packet(trigger_port, adc_config);
+    at_adc_trigger_packet(trigger_port, adc_config); //Fire the ADC!
 
     while (1)
     {
@@ -67,8 +69,8 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
                 break;
 
             case at_adc_read_packet(c_adc, adc_config, data):
-                joystick = data[0];
-                header = data[1];
+                joystick = data[0]; //First value in packet
+                header = data[1];   //Second value in packet
                 break;
         }
     }
