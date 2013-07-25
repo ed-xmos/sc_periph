@@ -11,4 +11,3 @@
 
 DEPENDENT_MODULES = module_xassert module_logging
 
-TARGET = XP-SKC-U16

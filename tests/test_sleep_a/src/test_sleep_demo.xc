@@ -1,7 +1,8 @@
-#include "at_periph.h"
+#include "analog_tile_support.h"
 #define DEBUG_PRINT_ENABLE 1
 #include "debug_print.h"
 #include <platform.h>
+#include <xscope.h>
 
 #define RTC_TIME 1000  //Time awake in ms
 #define SLEEP_TIME 5000  //Time asleep in ms
