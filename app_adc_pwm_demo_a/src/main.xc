@@ -4,12 +4,12 @@
 #include "debug_print.h"
 
 #define LOOP_PERIOD     10000000 // 100ms for printing and ADC trigger
-#define PWM_PERIOD         200   // Set PWM period to 2us, 500KHz
+#define PWM_PERIOD           200 // Set PWM period to 2us, 500KHz
 
 #define pwm_duty_calc(x) ((x * PWM_PERIOD) >> 8) //duty calc, 255 = full scale
 
 //Port and clock definitions
-//Note that these assume use of XP-SKC-A16 + XA-SK-MIXED-SIGNAL hardware
+//Note that these assume use of XP-SKC-U16 + XA-SK-MIXED-SIGNAL hardware
 on tile[0]: port trigger_port = PORT_ADC_TRIGGER; //Port 1I, D24
 on tile[0]: port pwm_dac_port = XS1_PORT_1G;      //D22
 on tile[0]: clock cl = XS1_CLKBLK_2;

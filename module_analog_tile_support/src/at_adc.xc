@@ -8,9 +8,7 @@
 
 #define DEBUG_UNIT ADC
 #include "debug_print.h"
-
 #include "xassert.h"
-
 #include "at_adc.h"
 
 static inline unsigned chanend_res_id(chanend c)

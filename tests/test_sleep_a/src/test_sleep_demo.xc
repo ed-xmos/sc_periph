@@ -1,5 +1,5 @@
-#include "analog_tile_support.h"
-#define DEBUG_PRINT_ENABLE 1
+#include "debug_conf.h"
+#include "at_sleep.h"
 #include "debug_print.h"
 #include <platform.h>
 #include <xscope.h>
@@ -40,7 +40,7 @@ void sleep_demo(void){
 	debug_printf("FAIL: Deep sleep memory incorrectly reports being valid\n",temp);
 	all_tests_passed = 0;
   }
-  at_pm_memory_set_validation(1); //Set deep sleep memory status to valid
+  at_pm_memory_validate(); //Set deep sleep memory status to valid
 
   if (at_pm_memory_is_valid()) debug_printf("PASS: Deep sleep memory correctly set to valid\n");
   else {
@@ -94,7 +94,7 @@ void sleep_demo(void){
   debug_printf("Going to sleep now for %u ms, alarm time = %ums\n", SLEEP_TIME, alarm_time);
   debug_printf("Sleep test passed if sleep is observed for about %ds, or until WAKE pin goes high (Tile 0, XD43)\n", SLEEP_TIME/1000);
 
-  at_pm_sleep_now(); //Go to sleep. Debugger will disconnect after this
+  at_pm_sleep_now(); //Go to sleep. Debugger will disconnect after this due to chip being powered down
 }
 
 

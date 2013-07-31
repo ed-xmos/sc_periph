@@ -9,8 +9,13 @@
 #define at_pm_memory_read(x) at_pm_memory_read_impl((x, char[]), sizeof(x))
 #define at_pm_memory_write(x) at_pm_memory_write_impl((x, char[]), sizeof(x))
 
-//Speed of 31KHz silicon oscialtor (approx)
-#define SI_OSCILLATOR_FREQ_31K 31250
+//Speed of silicon oscilltors (approx - These have around 15% tollerance)
+#define SI_OSCILLATOR_FREQ_31K 31250    //In Hertz
+#define SI_OSCILLATOR_FREQ_20M 20       //In MHz
+#define SI_OSC_STABILISATION   15       //Max time to stabilise in milliseconds
+
+#define VCO_STEP_MAX           30       //Allowable % step of VCO in percent
+                                        //Used in sleep to check if XTAL can be switched off
 
 /** Enumerated type containing possible wake sources from sleep mode
  *
@@ -52,13 +57,18 @@ void at_pm_memory_write_impl(char dara[], unsigned char size);
  */
 char at_pm_memory_is_valid(void);
 
-/** Function that sets the validity of the sleep memory
- * Use only after a write to sleep memory to set as valid.
- *  Note that the defaults to invalid on reset.
+/** Function that sets the validity of the sleep memory to valid
+ * Use only after a write to sleep memory contents.
+ * Note that it defaults to invalid on reset.
  *
- * \param boolean status.  1 = Valid, 0 = Invalid.
  */
-void at_pm_memory_set_validation(char isvalid);
+void at_pm_memory_validate(void);
+
+/** Function that sets the validity of the sleep memory to invalid
+ * Note that it defaults to invalid after power-on reset.
+ *
+ */
+void at_pm_memory_invalidate(void);
 
 //////////Sleep and wake control//////////
 
