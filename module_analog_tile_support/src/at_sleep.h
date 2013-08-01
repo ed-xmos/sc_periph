@@ -9,13 +9,27 @@
 #define at_pm_memory_read(x) at_pm_memory_read_impl((x, char[]), sizeof(x))
 #define at_pm_memory_write(x) at_pm_memory_write_impl((x, char[]), sizeof(x))
 
-//Speed of silicon oscilltors (approx - These have around 15% tollerance)
-#define SI_OSCILLATOR_FREQ_31K 31250    //In Hertz
-#define SI_OSCILLATOR_FREQ_20M 20       //In MHz
-#define SI_OSC_STABILISATION   15       //Max time to stabilise in milliseconds
 
-#define VCO_STEP_MAX           30       //Allowable % step of VCO in percent
-                                        //Used in sleep to check if XTAL can be switched off
+/**
+ * Approximate speed of 31KHz on chip silicon oscilator in Hz
+ */
+#define SI_OSCILLATOR_FREQ_31K 31250
+
+/**
+ * Approximate speed of 20MHz on chip silicon oscilator in MHz
+ */
+#define SI_OSCILLATOR_FREQ_20M 20
+
+/**
+ * Max stabilisation time of 20MHz oscillator in milliseconds Approximate speed of 31KHz on chip silicon oscilator in Hz
+ */
+#define SI_OSC_STABILISATION   15       
+
+/**
+ * Maximum percetage change of VCO. Used in sleep mode to see if XTAL and 20MHz OSC are close enough
+ * to allow switch between clock sources without reset. If close enough, XTAL can be switched off.
+ */
+#define VCO_STEP_MAX           30
 
 /** Enumerated type containing possible wake sources from sleep mode
  *
@@ -27,12 +41,11 @@
 typedef enum  {
 RTC,
 WAKE_PIN_LOW,
-WAKE_PIN_HIGH} wake_sources_t;
+WAKE_PIN_HIGH} at_wake_sources_t;
 
-//////////128B deep sleep memory access. See above macro for user API//////////
 
 /** Function that writes an array of size up to 128B to sleep memory.
- * Note, for types other than char[], please use above macro
+ * Note, for types other than char[], please use at_pm_memory_read(x) 
  *
  * \param reference to the charater array to be written
  *
@@ -41,7 +54,7 @@ WAKE_PIN_HIGH} wake_sources_t;
 void at_pm_memory_read_impl(char data[], unsigned char size);
 
 /** Function that reads an array of size up to 128B from sleep memory.
- * Note, to pass types other than char[], please use above macro
+ * Note, to pass types other than char[], please use at_pm_memory_read(x) 
  *
  * \param reference to the charater array to be written
  *
@@ -70,26 +83,24 @@ void at_pm_memory_validate(void);
  */
 void at_pm_memory_invalidate(void);
 
-//////////Sleep and wake control//////////
-
 /** Function that enables the chip to be woken by specific sources
  * Each wake source type can be enabled or disabled.
  * RTC and WAKE_PIN_x may be used together however,
  * WAKE_PIN_LOW or HIGH are mutually exclusive. Ie. enabling wake
  * on WAKE_PIN_LOW will disable WAKE_PIN_HIGH and vice versa.
  *
- * \param enumerated type wake_sources_t specifying wake source to enable
+ * \param enumerated type at_wake_sources_t specifying wake source to enable
  */
-void at_pm_enable_wake_source(wake_sources_t wake_source);
+void at_pm_enable_wake_source(at_wake_sources_t wake_source);
 
 /** Function that disables the chip to be woken by specific sources
  * Each wake source type can be enabled or disabled.
  * Disabling either WAKE_PIN_LOW or WAKE_PIN_HIGH will have the same
  * effect of diabling wake from pin
  *
- * \param enumerated type wake_sources_t specifying wake source to disable
+ * \param enumerated type at_wake_sources_t specifying wake source to disable
  */
-void at_pm_disable_wake_source(wake_sources_t wake_source);
+void at_pm_disable_wake_source(at_wake_sources_t wake_source);
 
 /** Function that sets the wake time in milliseconds, measured by the RTC clock.
  * It is recommended to reset the RTC before setting the wake time
@@ -124,14 +135,12 @@ void at_pm_set_min_sleep_time(unsigned int min_sleep_time);
  */
 void at_pm_sleep_now(void);
 
-//////////RTC (real time clock)//////////
-
 /** Function that reads the rtc value.
  * Takes the counter and scales to milliseconds.
  * The time may be up to about 4E6 seconds from reset, or approx 48 days
  * before overflow occurs.
  *
- * \returns time in milliseconds.
+ * \return time in milliseconds.
  */
 unsigned int at_rtc_read(void);
 

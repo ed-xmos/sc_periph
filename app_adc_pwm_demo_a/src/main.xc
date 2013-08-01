@@ -33,7 +33,7 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
 
     debug_printf("Analog loopback demo started.\n");
 
-    adc_config_t adc_config = { { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
+    at_adc_config_t adc_config = { { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
     adc_config.input_enable[4] = 1; //Input 4 is an analog input on header
     adc_config.input_enable[2] = 1; //Input 2 is one axis of the joystick
     adc_config.bits_per_sample = ADC_8_BPS;

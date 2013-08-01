@@ -52,7 +52,7 @@ void at_pm_memory_invalidate(void){
 }
 
 //Sleep and wake control
-void at_pm_enable_wake_source(wake_sources_t wake_source){
+void at_pm_enable_wake_source(at_wake_sources_t wake_source){
   unsigned int write_val;
   read_periph_32(usb_tile, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_MISC_CTRL_NUM, 1, &write_val);
   switch (wake_source){
@@ -79,7 +79,7 @@ void at_pm_enable_wake_source(wake_sources_t wake_source){
   write_periph_32(usb_tile, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_MISC_CTRL_NUM, 1, &write_val);
 }
 
-void at_pm_disable_wake_source(wake_sources_t wake_source)
+void at_pm_disable_wake_source(at_wake_sources_t wake_source)
 {
   unsigned int write_val;
   read_periph_32(usb_tile, XS1_SU_PER_PWR_CHANEND_NUM, XS1_SU_PER_PWR_MISC_CTRL_NUM, 1, &write_val);

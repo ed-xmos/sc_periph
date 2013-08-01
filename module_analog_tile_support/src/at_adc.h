@@ -17,7 +17,8 @@
 #define XS1_MAX_NUM_ADC 8
 
 /**
- *
+ * Minimum guarranteed buffer depth. Exceeding this number may cause lockup on read_packet.
+ * Use multiple read commands for more than 5 enabled ADC channels
  */
 #define XS1_MAX_SAMPLES_PER_PACKET 5
 
@@ -34,11 +35,11 @@
 /**
  * Valid bits_per_sample values (8, 16 or 32).
  */
-typedef enum adc_bits_per_sample_t {
+typedef enum at_adc_bits_per_sample_t {
     ADC_8_BPS  = 0,         /**< Samples will be truncated to 8 bits */
     ADC_16_BPS = 1,         /**< Samples will be placed in the MSB 12 bits of the half word */
     ADC_32_BPS = 3,         /**< Samples will be placed in the MSB 12 bits of the word */
-} adc_bits_per_sample_t;
+} at_adc_bits_per_sample_t;
 
 /**
  * Configuration structure for ADCs:
@@ -51,15 +52,15 @@ typedef enum adc_bits_per_sample_t {
  */
 typedef struct {
     char                   input_enable[XS1_MAX_NUM_ADC];
-    adc_bits_per_sample_t  bits_per_sample;          
+    at_adc_bits_per_sample_t  bits_per_sample;          
     unsigned int           samples_per_packet;       
     int                    calibration_mode;         
-} adc_config_t;
+} at_adc_config_t;
 
 #ifndef __XC__
-typedef const adc_config_t * const const_adc_config_ref_t;
+typedef const at_adc_config_t * const const_adc_config_ref_t;
 #else
-typedef const adc_config_t & const_adc_config_ref_t;
+typedef const at_adc_config_t & const_adc_config_ref_t;
 #endif
 
 /**

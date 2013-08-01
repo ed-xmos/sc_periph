@@ -9,6 +9,3 @@ xCORE-Analog Support Library
 Library providing support functions for xCORE-Analog devices including ADC, RTC, WDT and sleep mode.
 
 
-The ``xCORE-Analog ADC Example``, ``xCORE-Analog WDT Example`` and ``xCORE-Analog Sleep Examples`` demonstrate how to use this library
-
-
