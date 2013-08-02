@@ -6,14 +6,13 @@ Analog tile API
 Port Configuration
 ++++++++++++++++++
 
-The only port required by the analog tile library is the ADC trigger. This is fixed on the A series XS1 devices and should be set to XXXX TODO
+The only port required by the analog tile library is the ADC trigger. This should be set to the I/O pin that is used to trigger the ADC_SAMPLE pin on the A-series device. This should be chosen by the user, and is required in all cases.
 
 ADC API 
 -------
 
-.. doxygenstruct:: at_adc_bits_per_sample_t
 .. doxygenenum:: at_adc_bits_per_sample_t
-
+.. doxygenstruct:: at_adc_config_t
 .. doxygenfunction:: at_adc_enable
 .. doxygenfunction:: at_adc_disable_all
 .. doxygenfunction:: at_adc_trigger

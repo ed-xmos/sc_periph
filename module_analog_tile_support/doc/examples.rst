@@ -1,6 +1,9 @@
 
-Demonstration Applications
-==========================
+Example Applications
+====================
+
+Demo Applications
+-----------------
 
 ADC to PWM Demo
 +++++++++++++++
@@ -18,26 +21,25 @@ This is demo uses the Sleep and Wake feature of A series XMOS devices. In this d
    * Package: sc_periph
    * Application: app_a16_slicekit_ethernet_sleep_wake_combo_demo
 
-++Note to demonstrate entry AND exit from sleep mode, it is necessary to flash the application rather than just load it into RAM. This is because sleep mode removes the power from the xCORE and exit from sleep mode is a reset.
-
+   ++Note to demonstrate entry AND exit from sleep mode, it is necessary to flash the application rather than just load it into RAM. This is because sleep mode removes the power from the xCORE and exit from sleep mode is a reset. Therefore to continue executing, the chip needs to boot from flash again.
 
 Test Applications
-=================
+-----------------
 
 A number of test applications are included for completeness. Whilst not designed to be tutorial code, they may be useful to understand the library and chip capability, so are included for reference.
 
 tests/test_adc_config
----------------------
++++++++++++++++++++++
 
 Test program that checks various configurations of the ADC, as well as the in-built calibration mode using the on-chip reference.
 
 tests/test_sleep_a
-------------------
+++++++++++++++++++
 
 Checks operation of deep sleep memory, accuracy of RTC when awake and initiates sleep mode.
 
 tests/test_wdt_a
-----------------
+++++++++++++++++
 
 Tests the operation of the WDT. Checks that the timer is accurate relative the xCORE reference clock and checks the API functions.
 

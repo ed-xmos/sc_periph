@@ -24,7 +24,7 @@ WDT Library Features
 - Kick function to reset timer
 
 Sleep Library Features
-++++++++++++++++++++
+++++++++++++++++++++++
 
 - Sleep mode and wake control functions
 - RTC (Real Time Clock) configuration and control. Converts time and wake times to millseconds.

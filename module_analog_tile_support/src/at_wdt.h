@@ -22,7 +22,7 @@ void at_watchdog_disable(void);
  * Calling this function will automatically clear the WDT and start counting from zero ms.
  * It is a 16b counter which allows up to 65535 milliseconds, or about 65 seconds.
  *
- * \param watchdog overflow time in milliseconds
+ * \param milliseconds      watchdog overflow time in milliseconds
  */
 void at_watchdog_set_timeout(unsigned short milliseconds);
 

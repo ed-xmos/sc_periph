@@ -39,28 +39,29 @@
  * on WAKE_PIN_LOW will disable WAKE_PIN_HIGH
  */
 typedef enum  {
-RTC,
-WAKE_PIN_LOW,
-WAKE_PIN_HIGH} at_wake_sources_t;
+    RTC,            /**<Enable wake from RTC*/
+    WAKE_PIN_LOW,   /**<Wake when wake pin is low*/
+    WAKE_PIN_HIGH}  /**<Wake when wake pin is high*/
+at_wake_sources_t;
 
 
 /** Function that writes an array of size up to 128B to sleep memory.
- * Note, for types other than char[], please use at_pm_memory_read(x) 
+ * Note, to pass types other than char[], please use at_pm_memory_read(x) 
  *
- * \param reference to the charater array to be written
+ * \param data      reference to the charater array to be written
  *
- * \param size of array to be written in bytes
+ * \param size      size of array to be written in bytes
  */
 void at_pm_memory_read_impl(char data[], unsigned char size);
 
 /** Function that reads an array of size up to 128B from sleep memory.
  * Note, to pass types other than char[], please use at_pm_memory_read(x) 
  *
- * \param reference to the charater array to be written
+ * \param data      reference to the charater array to be written
  *
- * \param size of array to be written in bytes
+ * \param size      size of array to be written in bytes
  */
-void at_pm_memory_write_impl(char dara[], unsigned char size);
+void at_pm_memory_write_impl(char data[], unsigned char size);
 
 /** Function that test to see if the deep sleep memory contents are valid.
  *  Use before reading sleep memory to see if it has been previously initialised.
@@ -89,7 +90,7 @@ void at_pm_memory_invalidate(void);
  * WAKE_PIN_LOW or HIGH are mutually exclusive. Ie. enabling wake
  * on WAKE_PIN_LOW will disable WAKE_PIN_HIGH and vice versa.
  *
- * \param enumerated type at_wake_sources_t specifying wake source to enable
+ * \param wake_source   enumerated type at_wake_sources_t specifying wake source to enable
  */
 void at_pm_enable_wake_source(at_wake_sources_t wake_source);
 
@@ -98,7 +99,7 @@ void at_pm_enable_wake_source(at_wake_sources_t wake_source);
  * Disabling either WAKE_PIN_LOW or WAKE_PIN_HIGH will have the same
  * effect of diabling wake from pin
  *
- * \param enumerated type at_wake_sources_t specifying wake source to disable
+ * \param wake_source   enumerated type at_wake_sources_t specifying wake source to disable
  */
 void at_pm_disable_wake_source(at_wake_sources_t wake_source);
 
@@ -109,7 +110,7 @@ void at_pm_disable_wake_source(at_wake_sources_t wake_source);
  * The time may be up to about 4E6 seconds from reset, or approx 48 days
  * before overflow occurs.
  *
- * \param time to set alarm/wake up in milliseconds
+ * \param alarm_time     absolute time to set alarm/wake up in milliseconds
  */
 void at_pm_set_wake_time(unsigned int alarm_time);
 
@@ -117,10 +118,10 @@ void at_pm_set_wake_time(unsigned int alarm_time);
  * Default time on power up is 2^16 sleep clocks, or about 2s.
  * Note this function truncates to the value to the nearest
  * power of 2, so is +100% - 50% accurate, due to hardware.
- * This value is not critical but can be used to ignore pin events until
- * a certain time.
+ * This setting is not critical but can be used, for example,
+ * to ignore pin events until a certain time.
  *
- * \param time to set alarm/wake up in milliseconds
+ * \param min_sleep_time   minimum time asleep in milliseconds
  */
 void at_pm_set_min_sleep_time(unsigned int min_sleep_time);
 

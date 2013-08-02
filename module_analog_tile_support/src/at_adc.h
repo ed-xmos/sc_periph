@@ -43,18 +43,13 @@ typedef enum at_adc_bits_per_sample_t {
 
 /**
  * Configuration structure for ADCs:
- * \param input_enable          An array ints to determine which inputs are active.
- *                              Each non-zero input will be enabled.
- * \param bits_per_sample       Select how many bits to sample per ADC.
- * \param samples_per_packet    Number of samples per packet. Must be >0 and <=XS1_MAX_SAMPLES_PER_PACKET.
- * \param calibration_mode      When set the ADCs will sample a 0.8V reference
- *                              rather than the external voltage.
  */
 typedef struct {
-    char                   input_enable[XS1_MAX_NUM_ADC];
-    at_adc_bits_per_sample_t  bits_per_sample;          
-    unsigned int           samples_per_packet;       
-    int                    calibration_mode;         
+    char                   input_enable[XS1_MAX_NUM_ADC];   /**<An array ints to determine which inputs are active.                                                                                    Each non-zero input will be enabled.*/
+    at_adc_bits_per_sample_t  bits_per_sample;              /**<Select how many bits to sample per ADC.*/
+    unsigned int           samples_per_packet;              /**< Number of samples per packet. Must be >0 and <=XS1_MAX_SAMPLES_PER_PACKET.*/
+    int                    calibration_mode;                /**<When set the ADCs will sample a 0.8V reference 
+                                                            rather than the external voltage.*/
 } at_adc_config_t;
 
 #ifndef __XC__
