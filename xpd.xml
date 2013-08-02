@@ -43,6 +43,8 @@
     </dependency>
     <description>Collection of functions to support peripheral tiles.</description>
     <docdir>app_adc_demo_u/doc_quickstart</docdir>
+    <docdir>app_adc_pwm_demo_a/doc_quickstart</docdir>
+    <docdir>module_analog_tile_support/doc</docdir>
     <docdir>module_usb_tile_support/doc</docdir>
     <location>origin</location>
     <name>sc_periph</name>
