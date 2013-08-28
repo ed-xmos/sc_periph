@@ -33,11 +33,11 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
 
     debug_printf("Analog loopback demo started.\n");
 
-    at_adc_config_t adc_config = { { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 };
-    adc_config.input_enable[4] = 1; //Input 4 is an analog input on header
+    at_adc_config_t adc_config = { { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 0, 0 }; //initialse all ADC to off
     adc_config.input_enable[2] = 1; //Input 2 is one axis of the joystick
+    adc_config.input_enable[4] = 1; //Input 4 is an analog input on header
     adc_config.bits_per_sample = ADC_8_BPS;
-    adc_config.samples_per_packet = 2;
+    adc_config.samples_per_packet = 2; //Allow both samples to be sent in one hit
     adc_config.calibration_mode = 0;
 
     at_adc_enable(usb_tile, c_adc, trigger_port, adc_config);
@@ -55,19 +55,19 @@ void adc_pwm_dac_example(chanend c_adc, chanend c_pwm_dac)
         select
         {
             case loop_timer when timerafter(loop_time) :> void:
-                if (header != header_old){ //only do if something has changed
+                if (header != header_old){ //only do if value on header input has changed
                     debug_printf("ADC joystick : %u\t", joystick);
                     debug_printf("ADC header : %u\r", header);
                     header_old = header;
-                    xscope_probe_data(0, joystick);
-                    xscope_probe_data(1, header);
+                    xscope_probe_data(0, joystick); //send data to xscope
+                    xscope_probe_data(1, header);   //send data to xscope
                 }
                 c_pwm_dac <: pwm_duty_calc((unsigned int)joystick); //send to PWM
                 at_adc_trigger_packet(trigger_port, adc_config);    //Trigger ADC
                 loop_time += LOOP_PERIOD;
                 break;
 
-            case at_adc_read_packet(c_adc, adc_config, data):
+            case at_adc_read_packet(c_adc, adc_config, data): //if data ready to be read from ADC
                 joystick = data[0]; //First value in packet
                 header = data[1];   //Second value in packet
                 break;
@@ -79,7 +79,7 @@ int main()
 {
     chan c_adc, c_pwm_dac;
 
-    par {
+    par { //two logical cores and ADC  on channel end
         on tile[0]: adc_pwm_dac_example(c_adc, c_pwm_dac);
         on tile[0]: pwm_tutorial_example ( c_pwm_dac, pwm_dac_port, 1);
         xs1_su_adc_service(c_adc);
