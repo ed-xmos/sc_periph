@@ -24,10 +24,10 @@ void at_watchdog_set_timeout(unsigned short milliseconds){
 unsigned short at_watchdog_kick(void){
   unsigned short expiry_val, wdt_timer;
   unsigned int write_val, read_val;
-  read_node_config_reg(analog_tile, XS1_SU_CFG_WDOG_TMR_NUM, read_val);    //Get current expiry value & timer
-  expiry_val = (unsigned short) XS1_SU_CFG_WDOG_EXP(read_val);          //mask off expiry value
+  read_node_config_reg(analog_tile, XS1_SU_CFG_WDOG_TMR_NUM, read_val);  //Get current expiry value & timer
+  expiry_val = (unsigned short) XS1_SU_CFG_WDOG_EXP(read_val);           //mask off expiry value
   write_val =  (unsigned int) expiry_val | (~(unsigned int)expiry_val << 16);//Set the password in upper 16b
-  wdt_timer = (unsigned short) XS1_SU_CFG_WDOG_TMR(read_val);           //mask off and shift timer value
-  write_node_config_reg(analog_tile, XS1_SU_CFG_WDOG_TMR_NUM, write_val);  //rewrite expiry value to reset timer
-  return wdt_timer;                                                     //return wdt value
+  wdt_timer = (unsigned short) XS1_SU_CFG_WDOG_TMR(read_val);            //mask off and shift timer value
+  write_node_config_reg(analog_tile, XS1_SU_CFG_WDOG_TMR_NUM, write_val);//rewrite expiry value to reset timer
+  return wdt_timer;                                                      //return wdt value
 }

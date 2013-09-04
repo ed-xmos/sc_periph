@@ -6,7 +6,7 @@ Analog tile API
 Port Configuration
 ++++++++++++++++++
 
-The only port required by the analog tile library is the ADC trigger. This should be set to the I/O pin that is used to trigger the ADC_SAMPLE pin on the A-series device. This should be chosen by the user, and is required in all cases.
+The only port required by the analog tile library is the ADC trigger. This should be set to the I/O pin that is used to trigger the ADC_SAMPLE pin on the A-series device. This should be chosen by the user, and is required in all cases. Within this peripheral library, it is assumed that XD70 (Port 32A big 19) is used to trigger the ADC. 
 
 ADC API 
 -------

@@ -22,7 +22,8 @@ static unsigned int convert_ticks_to_ms (unsigned long long ticks){
 }
 
 
-//128B deep sleep memory access
+//128B deep sleep memory access. These functions exepct char type. See at_sleep.h for macros
+//that provide the type independant access to these (Ie. use struct, int, etc..)
 void at_pm_memory_read_impl(unsigned char data[], unsigned char size){
   assert(size <= XS1_SU_NUM_GLX_PER_MEMORY_BYTE && msg("Read from sleep memory exceeds size"));
   read_periph_8 (analog_tile, XS1_SU_PER_MEMORY_CHANEND_NUM, XS1_SU_PER_MEMORY_BYTE_0_NUM,
