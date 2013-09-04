@@ -32,7 +32,6 @@ Sleep & RTC (Realtime Clock) API
 --------------------------------
 
 .. doxygenenum:: at_wake_sources_t
-
 .. doxygenfunction:: at_pm_memory_read_impl
 .. doxygenfunction:: at_pm_memory_write_impl
 .. doxygenfunction:: at_pm_memory_is_valid
